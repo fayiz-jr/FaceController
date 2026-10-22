@@ -32,11 +32,11 @@ FaceController starts **paused** and only sends input while the game is the fron
 
 ## Setup
 
-1. **Build and install** (needs macOS 13+ and the Xcode Command Line Tools; full Xcode isn't required):
-   ```sh
-   ./build.sh --install
-   ```
-   This builds `FaceController.app`, puts it in `/Applications` and opens it. The 🎭 appears in the menu bar.
+1. **Get the app** (macOS 13 or later):
+   - **Download** `FaceController-x.y.zip` from [Releases](https://github.com/fayiz-jr/FaceController/releases/latest), unzip it and move FaceController to Applications. macOS blocks the first launch because the app isn't notarized: close the message (don't move it to the Trash), open **System Settings › Privacy & Security**, scroll down and click **Open Anyway** next to FaceController.
+   - **Or build it yourself** with the Xcode Command Line Tools (full Xcode isn't required): `./build.sh --install` builds the app, puts it in `/Applications` and opens it.
+
+   The 🎭 appears in the menu bar.
 2. **Allow Accessibility** when asked (System Settings → Privacy & Security → Accessibility). That's what lets it press keys.
 3. **On your iPhone**, install **Live Link Face** from the App Store, then:
    - choose **Live Link (ARKit)** mode

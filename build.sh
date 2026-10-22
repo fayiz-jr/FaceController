@@ -39,9 +39,22 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 PLIST
 
 # A stable signing identity keeps the Accessibility permission across rebuilds.
-IDENTITY=$(security find-identity -v -p codesigning | awk -F'"' '/Apple Development/ {print $2; exit}')
+# Release builds are signed ad hoc: a personal certificate's name would ship
+# inside every download.
+IDENTITY=""
+if [[ "${1:-}" != "--release" ]]; then
+    IDENTITY=$(security find-identity -v -p codesigning | awk -F'"' '/Apple Development/ {print $2; exit}')
+fi
 codesign --force --options runtime --sign "${IDENTITY:--}" "$APP"
 echo "✓ Built $APP (signed: ${IDENTITY:-ad hoc})"
+
+if [[ "${1:-}" == "--release" ]]; then
+    VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP/Contents/Info.plist")
+    ZIP="build/FaceController-$VERSION.zip"
+    rm -f "$ZIP"
+    ditto -c -k --keepParent "$APP" "$ZIP"
+    echo "✓ Release archive: $ZIP"
+fi
 
 if [[ "${1:-}" == "--install" ]]; then
     pkill -x FaceController 2>/dev/null || true
